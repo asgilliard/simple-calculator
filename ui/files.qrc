@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>icons/backspace.png</file>
+    <file>icons/calculate.png</file>
+    <file>icons/percent.png</file>
+  </qresource>
+</RCC>

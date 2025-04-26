@@ -1,0 +1,37 @@
+version = 1
+revision = 1
+requires-python = ">=3.10"
+
+[[package]]
+name = "calculator"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "pyside6" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pyside6", specifier = "==6.2.0" }]
+
+[[package]]
+name = "pyside6"
+version = "6.2.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "shiboken6" },
+]
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9c/bb/90a09a4fe90cc990667d84e4845c89399e2d0a0d26782fbd37e7227c40ba/PySide6-6.2.0-6.2.0-cp36.cp37.cp38.cp39.cp310-abi3-macosx_10_14_x86_64.whl", hash = "sha256:57c039dc188dd5465c8a605ffa364748ae397894ac18f6df2655252ad015c97b", size = 305575733 },
+    { url = "https://files.pythonhosted.org/packages/95/51/841f9abdcbb92e826a1c997af9a27097aa1f4366f22a6026106807895b45/PySide6-6.2.0-6.2.0-cp36.cp37.cp38.cp39.cp310-abi3-manylinux1_x86_64.whl", hash = "sha256:f1b3c2992a3edbadb8b40734870ca6d6bd51b6f1678a7ec91839fad1fd0dbc91", size = 269399640 },
+    { url = "https://files.pythonhosted.org/packages/c3/2e/ce54b333fde99601773b5c6a16d2749f8783f1bf39fca549b781df5e2ab7/PySide6-6.2.0-6.2.0-cp36.cp37.cp38.cp39.cp310-none-win_amd64.whl", hash = "sha256:e8d0427d7b20ec53c08a01f2563934b4342e78b87ed7e01596e147b18590b5c8", size = 154061265 },
+]
+
+[[package]]
+name = "shiboken6"
+version = "6.2.0"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1c/ad/d0726736c597ba7f9b5375ea7947e95e23c8e51259032d9f471ab7abc3e6/shiboken6-6.2.0-6.2.0-cp36.cp37.cp38.cp39.cp310-abi3-macosx_10_14_x86_64.whl", hash = "sha256:8ccd10c9e21cb6e1e9135f706ea988c41494f7282cb869f5b2069b8142742865", size = 973565 },
+    { url = "https://files.pythonhosted.org/packages/87/ab/addca450346eca80f890139f87ce4abeb0541e019cab1386d2a9d7992f6f/shiboken6-6.2.0-6.2.0-cp36.cp37.cp38.cp39.cp310-abi3-manylinux1_x86_64.whl", hash = "sha256:dce3b434d5d1be50b8920799647bbb2346dfd9331bf922425128085020097cb8", size = 996480 },
+    { url = "https://files.pythonhosted.org/packages/c1/63/53260035e692aee4f8c38ec6f8e0f9f657992d6286473bdf7bc2229224d5/shiboken6-6.2.0-6.2.0-cp36.cp37.cp38.cp39.cp310-none-win_amd64.whl", hash = "sha256:44d32913baf698265f48a4d1072224ef6503bc49911b44dcfb48b103310ad643", size = 2333340 },
+]
