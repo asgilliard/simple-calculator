@@ -7,7 +7,7 @@ OPERATOR_BUTTONS = ('btn_sum', 'btn_dif', 'btn_mul', 'btn_sub')
 
 OPERATIONS = {
     '+': add,
-    '−': sub,
+    '-': sub,
     '×': mul,
     '/': truediv
 }
