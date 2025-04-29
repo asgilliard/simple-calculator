@@ -174,7 +174,8 @@ class Calculator(QMainWindow):
         try:
             result = config.OPERATIONS[op](a, b)
             numbers.append(result)
-        except ZeroDivisionError
+        except ZeroDivisionError:
+            pass
     
     # actions handling
     def handle_clear(self) -> None:
