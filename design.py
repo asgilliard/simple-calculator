@@ -39,13 +39,13 @@ class Ui_MainWindow(object):
 "    color: #ffffff;\n"
 "    background-color: #121212;\n"
 "    font-family: Open Sans;\n"
-"    font-size: 16px;\n"
+"    font-size: 20px;\n"
 "    font-weight: 600;\n"
 "    border: none;\n"
 "}\n"
 "\n"
 "QPushButton {\n"
-"    background-color: #202020;\n"
+"    background-color: #303030;\n"
 "    margin: 1px;\n"
 "}\n"
 "\n"
@@ -53,21 +53,38 @@ class Ui_MainWindow(object):
 "    background-color: #888;\n"
 "}\n"
 "\n"
+"QPushButton#btn_clear,\n"
+"QPushButton#btn_back,\n"
+"QPushButton#btn_percent {\n"
+"    background-color: #202020;\n"
+"    color: #ffffff;\n"
+"}\n"
+"\n"
+"QPushButton#btn_clear:pressed,\n"
+"QPushButton#btn_back:pressed,\n"
+"QPushButton#btn_percent:pressed {\n"
+"    background-color: #888;\n"
+"    color: #ffffff;\n"
+"}\n"
+"\n"
 "QPushButton#btn_prod,\n"
 "QPushButton#btn_sum,\n"
 "QPushButton#btn_dif,\n"
 "QPushButton#btn_mul,\n"
 "QPushButton#btn_sub {\n"
-"    background-color: #FA5000;\n"
-"    color: #121212\n"
+"/*background-color: #FA5000;*/    \n"
+"    background-color: #99CCFF;\n"
+"    color: #121212;\n"
 "}\n"
 "\n"
 "QPushButton#btn_prod:pressed,\n"
 "QPushButton#btn_sum:pressed,\n"
 "QPushButton#btn_dif:pressed,\n"
-"QPushButton#btn_mul:pressed,\n"
+"QPushButton#btn_mul"
+                        ":pressed,\n"
 "QPushButton#btn_sub:pressed {\n"
-"    background-color: #FF6F00;\n"
+"    /* background-color: #FF6F00;*/\n"
+"    background-color: #CCE5FF;\n"
 "}\n"
 "\n"
 "QLineEdit {\n"
@@ -155,6 +172,10 @@ class Ui_MainWindow(object):
         font.setFamilies([u"Open Sans"])
         font.setBold(True)
         self.btn_prod.setFont(font)
+        icon2 = QIcon()
+        icon2.addFile(u":/icons/icons/equal_28.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.btn_prod.setIcon(icon2)
+        self.btn_prod.setIconSize(QSize(20, 20))
 
         self.layout_buttons.addWidget(self.btn_prod, 4, 3, 1, 1)
 
@@ -230,9 +251,10 @@ class Ui_MainWindow(object):
         self.btn_back.setObjectName(u"btn_back")
         sizePolicy3.setHeightForWidth(self.btn_back.sizePolicy().hasHeightForWidth())
         self.btn_back.setSizePolicy(sizePolicy3)
-        icon2 = QIcon()
-        icon2.addFile(u":/icons/icons/backspace.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.btn_back.setIcon(icon2)
+        self.btn_back.setAutoFillBackground(False)
+        icon3 = QIcon()
+        icon3.addFile(u":/icons/icons/backspace.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.btn_back.setIcon(icon3)
         self.btn_back.setIconSize(QSize(24, 24))
 
         self.layout_buttons.addWidget(self.btn_back, 0, 1, 1, 1)
@@ -308,7 +330,7 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(shortcut)
         self.btn_sub.setShortcut(QCoreApplication.translate("MainWindow", u"/", None))
 #endif // QT_CONFIG(shortcut)
-        self.btn_prod.setText(QCoreApplication.translate("MainWindow", u"=", None))
+        self.btn_prod.setText("")
 #if QT_CONFIG(shortcut)
         self.btn_prod.setShortcut(QCoreApplication.translate("MainWindow", u"=", None))
 #endif // QT_CONFIG(shortcut)

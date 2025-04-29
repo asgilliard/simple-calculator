@@ -18,6 +18,7 @@ class Calculator(QMainWindow):
         self.display = self.ui.display
         self.temp = self.ui.label
         self.priorities = {'+': 1, '-': 1, '×': 2, '/': 2}
+        self.display_max_len = self.display.maxLength() # 16 символов
         
         # connect digits and operations
         self.connect_digit_buttons()
@@ -27,6 +28,8 @@ class Calculator(QMainWindow):
         self.connect_clear()
         self.connect_point()
         self.connect_sign()
+        self.connect_backspace()
+        self.connect_percent()
         
         self.reset_calculation_state()
     
@@ -57,16 +60,21 @@ class Calculator(QMainWindow):
         
     def connect_sign(self):
         self.ui.btn_sign.clicked.connect(self.handle_sign)
+        
+    def connect_backspace(self):
+        self.ui.btn_back.clicked.connect(self.handle_backspace)
     
+    def connect_percent(self):
+        self.ui.btn_percent.clicked.connect(self.handle_percent)
     
     # backend logic
     
     def reset_calculation_state(self):
         self.expression_stack: list[float | str] = []
         self.current_number = '0'
+        self.is_pushed_operator = False
         self.update_temp()
         self.update_display()
-        self.is_pushed_operator = False
     
     @staticmethod
     def remove_trailing_zeros(number: str) -> str:
@@ -82,12 +90,14 @@ class Calculator(QMainWindow):
         else:
             self.current_number += digit
 
+        self.avoid_display_max_len_overflow()
         self.is_pushed_operator = False
         self.update_display()
         
     def handle_point(self) -> None:
         if '.' not in self.current_number:
             self.current_number += '.'
+            self.avoid_display_max_len_overflow()
             self.update_display()
         
     def handle_operator(self) -> None:
@@ -96,14 +106,17 @@ class Calculator(QMainWindow):
         
         if not self.is_pushed_operator:
             self.expression_stack.append(float(self.current_number))
-            self.is_pushed_operator = True    
+            self.update_temp()
+            self.is_pushed_operator = True
         
         if self.expression_stack and isinstance(self.expression_stack[-1], str):  # если последний в стеке - str (оператор) - меняем его на нажатый
             self.expression_stack[-1] = operator
         else:
             self.expression_stack.append(operator)
+        self.update_temp()
         
         self.collapse_stack()
+        
         self.update_temp()
         self.update_display()
         
@@ -122,8 +135,7 @@ class Calculator(QMainWindow):
         self.expression_stack.clear()
                 
         for i in range(len(operators)):
-            if numbers[i]:
-                self.expression_stack.append(numbers[i])
+            self.expression_stack.append(numbers[i])
             self.expression_stack.append(operators[i])
     
     def calculate(self) -> None:
@@ -159,9 +171,12 @@ class Calculator(QMainWindow):
         b = numbers.pop()
         a = numbers.pop()
         op = operators.pop()
-        result = config.OPERATIONS[op](a, b)
-        numbers.append(result)
+        try:
+            result = config.OPERATIONS[op](a, b)
+            numbers.append(result)
+        except ZeroDivisionError
     
+    # actions handling
     def handle_clear(self) -> None:
         if self.current_number == '0':
             self.reset_calculation_state()            
@@ -170,31 +185,53 @@ class Calculator(QMainWindow):
             self.display.setText(self.current_number)
             
     def handle_sign(self):
-        if not self.is_pushed_operator:
-            if '-' not in self.current_number:
-                if self.current_number != '0':
-                    self.current_number = '-' + self.current_number
-            else:
-                self.current_number = self.current_number[1:]
+        if '-' not in self.current_number:
+            if self.current_number != '0':
+                self.current_number = '-' + self.current_number
+        else:
+            self.current_number = self.current_number[1:]
             
+        self.update_display()
+            
+    def handle_backspace(self):
+        if len(self.current_number) == 1:
+            self.current_number = '0'
+        elif len(self.current_number) == 2 and '-' in self.current_number:
+            self.current_number = '0'
+        else:
+            self.current_number = self.current_number[:-1]
+            
+        self.update_display()
+        
+    def handle_percent(self):
+        if self.current_number != 0:
+            current = float(self.current_number)
+            current = round(current / 100, 12)
+            self.current_number = self.remove_trailing_zeros(str(current))
             self.update_display()
     
     def update_display(self) -> None:
         self.display.setText(self.current_number)
     
     def update_temp(self) -> None:
-            temp_text = ''
+        temp_text = ''
             
-            for i in self.expression_stack:
-                if isinstance(i, float):
-                    temp_text += self.remove_trailing_zeros(str(i))
-                    temp_text += ' '
-                else:
-                    temp_text += str(i)
-                    temp_text += ' '
-            
-            self.temp.setText(temp_text)    
-
+        for i in self.expression_stack:
+            if isinstance(i, float):
+                temp_text += self.remove_trailing_zeros(str(i))
+                temp_text += ' '
+            else:
+                temp_text += str(i)
+                temp_text += ' '
+                       
+        self.temp.setText(temp_text)
+           
+    # errors handling
+    def avoid_display_max_len_overflow(self):
+        while len(self.current_number) >= self.display_max_len:
+            self.current_number = self.current_number[:-1]
+    
+    
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

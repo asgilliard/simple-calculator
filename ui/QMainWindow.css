@@ -2,13 +2,13 @@ QWidget {
     color: #ffffff;
     background-color: #121212;
     font-family: Open Sans;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 600;
     border: none;
 }
 
 QPushButton {
-    background-color: #202020;
+    background-color: #303030;
     margin: 1px;
 }
 
@@ -16,12 +16,28 @@ QPushButton:pressed {
     background-color: #888;
 }
 
+QPushButton#btn_clear,
+QPushButton#btn_back,
+QPushButton#btn_percent {
+    background-color: #202020;
+    color: #ffffff;
+}
+
+QPushButton#btn_clear:pressed,
+QPushButton#btn_back:pressed,
+QPushButton#btn_percent:pressed {
+    background-color: #888;
+    color: #ffffff;
+}
+
 QPushButton#btn_prod,
 QPushButton#btn_sum,
 QPushButton#btn_dif,
 QPushButton#btn_mul,
 QPushButton#btn_sub {
-    background-color: #FA5000;
+    /*background-color: #FA5000;*/
+    background-color: #99ccff;
+    color: #121212;
 }
 
 QPushButton#btn_prod:pressed,
@@ -29,7 +45,8 @@ QPushButton#btn_sum:pressed,
 QPushButton#btn_dif:pressed,
 QPushButton#btn_mul:pressed,
 QPushButton#btn_sub:pressed {
-    background-color: #FF6F00;
+    /*background-color: #FF6F00;*/
+    background_color: #cce5ff;
 }
 
 QLineEdit {
