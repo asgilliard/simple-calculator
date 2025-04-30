@@ -175,7 +175,7 @@ class Calculator(QMainWindow):
             result = config.OPERATIONS[op](a, b)
             numbers.append(result)
         except ZeroDivisionError:
-            pass
+            self.handle_zero_division_error()
     
     # actions handling
     def handle_clear(self) -> None:
@@ -205,13 +205,21 @@ class Calculator(QMainWindow):
         self.update_display()
         
     def handle_percent(self):
-        if self.current_number != 0:
-            current = float(self.current_number)
-            current = round(current / 100, 12)
-            self.current_number = self.remove_trailing_zeros(str(current))
-            self.update_display()
+        current = float(self.current_number)
+        current /= 100
+        
+        if len(self.expression_stack) >= 2:
+            whole = self.expression_stack[-2]
+            if isinstance(whole, float):
+                self.current_number = self.remove_trailing_zeros(str(round(float(whole) * current, 12)))
+        else:
+            self.current_number = self.remove_trailing_zeros(str(round(current, 12)))
+        
+        self.update_display()
     
     def update_display(self) -> None:
+        self.display.setMaxLength(15)
+        self.display.setStyleSheet('font-size: 40pt; color: #FFFFFF;')
         self.display.setText(self.current_number)
     
     def update_temp(self) -> None:
@@ -232,6 +240,17 @@ class Calculator(QMainWindow):
         while len(self.current_number) >= self.display_max_len:
             self.current_number = self.current_number[:-1]
     
+    def handle_zero_division_error(self):
+        text = config.ZERO_DIVISION_ERROR
+        
+        self.expression_stack.clear()
+        self.update_temp()
+        
+        self.display.setMaxLength(len(text))
+        self.display.setStyleSheet('font-size: 32pt; color: #99ccff;')
+        self.display.setText(text)
+        
+        self.current_number = '0'
     
 
 if __name__ == "__main__":

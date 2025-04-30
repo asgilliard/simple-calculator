@@ -11,3 +11,5 @@ OPERATIONS = {
     '×': mul,
     '/': truediv
 }
+
+ZERO_DIVISION_ERROR = 'Division by Zero'
