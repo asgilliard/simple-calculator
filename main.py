@@ -69,7 +69,7 @@ class Calculator(QMainWindow):
     
     # backend logic
     
-    def reset_calculation_state(self):
+    def reset_calculation_state(self) -> None:
         self.expression_stack: list[float | str] = []
         self.current_number = '0'
         self.is_pushed_operator = False
@@ -185,16 +185,16 @@ class Calculator(QMainWindow):
             self.current_number = '0'
             self.display.setText(self.current_number)
             
-    def handle_sign(self):
+    def handle_sign(self) -> None:
         if '-' not in self.current_number:
             if self.current_number != '0':
                 self.current_number = '-' + self.current_number
         else:
             self.current_number = self.current_number[1:]
-            
+           
         self.update_display()
             
-    def handle_backspace(self):
+    def handle_backspace(self) -> None:
         if len(self.current_number) == 1:
             self.current_number = '0'
         elif len(self.current_number) == 2 and '-' in self.current_number:
@@ -204,7 +204,7 @@ class Calculator(QMainWindow):
             
         self.update_display()
         
-    def handle_percent(self):
+    def handle_percent(self) -> None:
         current = float(self.current_number)
         current /= 100
         
@@ -219,8 +219,8 @@ class Calculator(QMainWindow):
     
     def update_display(self) -> None:
         self.display.setMaxLength(15)
-        self.display.setStyleSheet('font-size: 40pt; color: #FFFFFF;')
         self.display.setText(self.current_number)
+        self.adjust_display_font_size()
     
     def update_temp(self) -> None:
         temp_text = ''
@@ -232,15 +232,16 @@ class Calculator(QMainWindow):
             else:
                 temp_text += str(i)
                 temp_text += ' '
-                       
+              
         self.temp.setText(temp_text)
+        self.adjust_temp_font_size() 
            
     # errors handling
-    def avoid_display_max_len_overflow(self):
+    def avoid_display_max_len_overflow(self) -> None:
         while len(self.current_number) >= self.display_max_len:
             self.current_number = self.current_number[:-1]
     
-    def handle_zero_division_error(self):
+    def handle_zero_division_error(self) -> None:
         text = config.ZERO_DIVISION_ERROR
         
         self.expression_stack.clear()
@@ -251,6 +252,48 @@ class Calculator(QMainWindow):
         self.display.setText(text)
         
         self.current_number = '0'
+        
+    # UI
+    
+    def get_display_text_width(self) -> int:
+        return self.display.fontMetrics().boundingRect(self.display.text()).width()
+    
+    def get_temp_text_width(self) -> int:
+        return self.temp.fontMetrics().boundingRect(self.temp.text()).width()
+    
+    def adjust_display_font_size(self) -> None:
+        font_size = config.DEFAULT_DISPLAY_FONT_SIZE
+        while self.get_display_text_width() > self.display.width() - 30:
+            font_size -= 1
+            self.display.setStyleSheet(f'font-size: {font_size}pt; border: none;')
+
+        font_size = 1
+        while self.get_display_text_width() < self.display.width() - 60:
+            font_size += 1
+
+            if font_size > config.DEFAULT_DISPLAY_FONT_SIZE:
+                break
+
+            self.display.setStyleSheet(f'font-size: {font_size}pt; border: none;')
+
+    def adjust_temp_font_size(self) -> None:
+        font_size = config.DEFAULT_FONT_SIZE
+        while self.get_temp_text_width() > self.temp.width() - 30:
+            font_size -= 1
+            self.temp.setStyleSheet(f'font-size: {font_size}pt; color: #888;')
+
+        font_size = 1
+        while self.get_temp_text_width() < self.temp.width() - 60:
+            font_size += 2
+
+            if font_size > config.DEFAULT_FONT_SIZE:
+                break
+
+            self.temp.setStyleSheet(f'font-size: {font_size}pt; color: #888;')
+
+    def resizeEvent(self, event) -> None:
+        self.adjust_display_font_size()
+        self.adjust_temp_font_size()
     
 
 if __name__ == "__main__":
