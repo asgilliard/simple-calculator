@@ -137,6 +137,9 @@ class Calculator(QMainWindow):
         for i in range(len(operators)):
             self.expression_stack.append(numbers[i])
             self.expression_stack.append(operators[i])
+            
+        if len(self.expression_stack) == 2:
+            self.current_number = self.remove_trailing_zeros(str(self.expression_stack[0]))
     
     def calculate(self) -> None:
         self.expression_stack.append(float(self.current_number))
